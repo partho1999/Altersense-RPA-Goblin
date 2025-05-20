@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>{% block title %}{% endblock title %} | Altersense RPA</title>
+</head>
+<body class="flex flex-col h-screen justify-between">
+  <nav class="p-5 flex item-center justify-between bg-gray-800">
+    <a href="/" class="text-xl text-cyan-500" >Altersense RPA</a>
+    <div class="space-x-4">
+        {% comment %} <a href="/about" class="text-white">About</a> {% endcomment %}
+        {% comment %} <a href="{% url "core:about" %}" class="text-white">About</a>
+        <a href="{% url "core:services" %}" class="text-white">Services</a>
+        <a href="{% url "core:pricing" %}" class="text-white">Pricing</a> {% endcomment %}
+
+        {% comment %} {% if request.user.is_authenticated %} {% endcomment %}
+          {% comment %} <a href="{% url "accounts:logout" %}" class="py-2 px-4 bg-rose-600 text-white rounded-xl">Logout</a> {% endcomment %}
+        {% comment %} {% else %} {% endcomment %}
+        {% comment %} Hide signup button {% endcomment %}
+          {% comment %} <a href="{% url "accounts:signup" %}" class="py-2 px-4 bg-cyan-600 text-white rounded-xl">Signup</a> {% endcomment %}
+          {% comment %} <a href="{% url "accounts:login" %}" class="py-2 px-4 bg-gray-600 text-white rounded-xl">Login</a> {% endcomment %}
+        {% comment %} {% endif %} {% endcomment %}
+        
+    </div>
+  </nav>
+
+  <main class="p-6">
+    {% block content %}
+    {% endblock content %}
+  </main>
+
+  <footer class="p-2 bg-gray-900">
+    <p class="text-s text-center text-gray-400">Copyright(c) 2024 - Altersense Limited</p>
+  </footer>
+</body>
+</html>

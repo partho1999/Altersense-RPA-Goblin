@@ -1,0 +1,112 @@
+
+{% extends "core/base.html" %}
+
+{% block title %}Download Exp{% endblock title %}
+
+{% block content %}
+<h1 class="text-3xl font-semibold mb-4 text-center">Download Exp From Bangladesh Bank Portal</h1>
+<!-- upload.html -->
+
+<div class="flex items-center justify-center">
+    
+    <form method="post" enctype="multipart/form-data" class="w-3/5 p-4 bg-white rounded shadow-md">
+        {% csrf_token %}
+        <!--- Username Input -->
+        <div class="mb-4">
+            <label for="username" class="block text-gray-700 text-sm font-bold mb-2">Username:</label>
+            <input type="text" name="username" id="username" class="w-full py-2 px-3 border rounded-md text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+        </div>
+        <!--- Password Input -->
+        <div class="mb-4">
+            <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Password:</label>
+            <input type="password" name="password" id="password" class="w-full py-2 px-3 border rounded-md text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+        </div>
+
+        <!-- Choose File Field with medium width -->
+        <div class="mb-4">
+            <label for="fileInput" class="block text-gray-700 text-sm font-bold mb-2">Choose File:</label>
+            <input type="file" name="file" id="fileInput" accept='.xlsx' class="block w-full text-sm text-black-500
+            file:mr-4 file:py-2 file:px-2 file:rounded-md
+            file:border-0 file:text-sm file:font-semibold
+            file:bg-blue-200 file:text-black-700
+            hover:file:bg-blue-100" required>
+            {% comment %} <input type="file" name="file" id="fileInput" accept='.xlsx' class="appearance-none block w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded leading-tight focus:outline-none focus:shadow-outline" required> {% endcomment %}
+            {% comment %} <input type="file" name="file" id="fileInput" accept='.xlsx' class="w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required> {% endcomment %}
+        </div>
+
+        {% comment %} Target Download Folder {% endcomment %}
+        {% comment %} <div class="mb-4">
+            <label for="folderInput" class="block text-gray-700 text-sm font-bold mb-2">Select Download Folder:</label>
+            <input type="file" name="folderInput" id="folderInput" class="block w-full text-sm text-black-500
+            file:mr-4 file:py-2 file:px-2 file:rounded-md
+            file:border-0 file:text-sm file:font-semibold
+            file:bg-blue-200 file:text-black-700
+            hover:file:bg-blue-100" webkitdirectory directory multiple required>
+        </div> {% endcomment %}
+
+        <!-- Your custom HTML for other form elements, if any -->
+
+        <!-- Upload File Button -->
+        <button type="submit" onclick="checkFile()"  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded">
+            Start
+        </button>
+
+        <a href="/exp_download_report" target="_blank" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 mx-2 rounded">
+                Download Report
+        </a>
+
+        <a href="/exp_zip_download_report" target="_blank" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 mx-2 rounded">
+                Download PDF
+        </a>
+    </form>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+<script>
+    function checkFile() {
+        var input = document.getElementById('fileInput');
+        var file = input.files[0];
+
+        if (file) {
+            var fileSize = file.size; // in bytes
+            var maxSize = 10 * 1024 * 1024; // 5 MB
+
+            if (fileSize > maxSize) {
+                alert('File size exceeds the maximum allowed (10 MB). Please choose a smaller file.');
+            }
+            else {
+                checkFileRows();
+            }
+        }
+    }
+    function checkFileRows() {
+        var input = document.getElementById('fileInput');
+        var file = input.files[0];
+
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var data = e.target.result;
+                var workbook = XLSX.read(data, { type: 'binary' });
+                var sheet = workbook.Sheets[workbook.SheetNames[0]];
+                var rows = XLSX.utils.sheet_to_json(sheet).length;
+
+                if (rows > 1000) {
+                    alert('File exceeds the maximum allowed rows (1000). Please choose a file with 1000 rows or less.');
+                } else {
+                    document.getElementById('myForm').submit();
+                    showProcessingStatus();
+                }
+            };
+
+            reader.readAsBinaryString(file);
+        }
+    }
+
+    // Check if booking_status is not empty and display an alert
+    {% if exp_download_status %}
+        alert("{{ exp_download_status }}");
+    {% endif %}
+
+</script>
+
+{% endblock content %}

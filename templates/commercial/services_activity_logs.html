@@ -1,0 +1,129 @@
+{% extends 'shared/base.html' %} {% load static %} {% block content %}
+
+<div>
+  <div>
+    <h1 class="">Services Activity Logs</h1>
+  </div>
+  <div id="show_status_id"></div>
+  <table
+    class="table table-bordered table-hover table-striped"
+    id="po_table_id"
+  ></table>
+</div>
+
+<script>
+  let data_for_table = [];
+  let service_activity_logs = "{{ activity_logs|escapejs }}";
+  service_activity_logs = JSON.parse(service_activity_logs);
+  let purchase_order_booking_data = "{{ purchase_order_booking|escapejs }}";
+  purchase_order_booking_data = JSON.parse(purchase_order_booking_data);
+  let request_id = "{{ request_id|escapejs }}";
+  const show_status_id = document.getElementById("show_status_id");
+  const table = document.getElementById("po_table_id");
+  console.log({ purchase_order_booking_data });
+  console.log({ service_activity_logs });
+  let purchase_order_booking_status =
+    purchase_order_booking_data[0].fields.status;
+  show_status_id.innerHTML = `<h3>Purchase Order Booking Status: ${purchase_order_booking_status}</h3>`;
+  data_for_table = service_activity_logs;
+
+  function showData(table_row) {
+    const tableHead = `
+    <thead>
+      <tr>
+        <th class="font-weight-bold p-2 border border-primary">SL-NO</th>
+        <th class="font-weight-bold p-2 border border-primary">request_id</th>
+        <th class="font-weight-bold p-2 border border-primary">activity_type</th>
+        <th class="font-weight-bold p-2 border border-primary">activity</th>
+        <th class="font-weight-bold p-2 border border-primary">activity_time</th>
+        <th class="font-weight-bold p-2 border border-primary">draft</th>
+        </tr>
+    </thead>
+  `;
+    const tableBody = `
+        <tbody>
+          ${table_row.map(
+            (po, i) => `
+              <tr>
+                  <td
+                   class="font-weight-bold p-2 border border-primary"
+                   >${i + 1}</td>
+                  <td
+                   class="font-weight-bold p-2 border border-primary"
+                   >${po?.fields?.request_id}</td>
+                  <td
+                   class="font-weight-bold p-2 border border-primary">${
+                     po?.fields?.activity_type
+                   }</td>
+                  <td
+                   class="font-weight-bold p-2 border border-primary">${
+                     po?.fields?.activity
+                   }</td>
+                  <td
+                   class="font-weight-bold p-2 border border-primary">${
+                     po?.fields?.activity_time
+                   }</td>
+                  <td
+                   class="font-weight-bold p-2 border border-primary">${
+                     po?.fields?.draft
+                   }</td>
+              </tr>
+              `
+          )}
+          </tbody>
+          `;
+
+    table.innerHTML = tableHead + tableBody;
+  }
+
+  showData(data_for_table);
+
+  let inter_val;
+
+  function fetchServiceActivityLogs() {
+    fetch(`/commercial/activity-log-json/${request_id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("fetchServiceActivityLogs===>", data);
+        data_for_table = JSON.parse(data.activity_logs);
+        let purchase_order_booking_data = JSON.parse(
+          data?.purchase_order_booking
+        );
+        purchase_order_booking_status =
+          purchase_order_booking_data?.[0]?.fields?.status || "not found";
+        show_status_id.innerHTML = `<h3>Purchase Order Booking Status: ${purchase_order_booking_status}</h3>`;
+        console.log("====================================");
+        console.log(
+          "purchase_order_booking_status===>",
+          purchase_order_booking_status
+        );
+        console.log("====================================");
+
+        if (purchase_order_booking_status != "running") {
+          clearInterval(inter_val);
+          console.log("====================================");
+          console.log(">>>>>>>>>clearInterval<<<<<<<<<");
+          console.log("====================================");
+        }
+      });
+
+    if (purchase_order_booking_status != "running") {
+      clearInterval(inter_val);
+      console.log("====================================");
+      console.log(">>>>>>>>>clearInterval inside interval<<<<<<<<<");
+      console.log("====================================");
+    }
+  }
+
+  if (purchase_order_booking_status == "running") {
+    inter_val = setInterval(() => {
+      console.log("====================================");
+      console.log(">>>>>>>>>fetchServiceActivityLogs<<<<<<<<<");
+      console.log("====================================");
+      fetchServiceActivityLogs();
+      showData(data_for_table);
+    }, 5000);
+  }
+</script>
+
+{% endblock %}

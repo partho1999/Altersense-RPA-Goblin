@@ -1,0 +1,51 @@
+{% extends 'shared/base.html' %} {% load static %} {% block content %}
+
+<div>
+  <div>
+    <h1 class="">Invoice Activity Logs</h1>
+  </div>
+  <div id="show_status_id"></div>
+  <table
+    class="table table-bordered table-hover table-striped"
+    id="invoice_table_id"
+  >
+    <thead>
+      <tr>
+        <th class="font-weight-bold p-2 border border-primary">SL-NO</th>
+        <th class="font-weight-bold p-2 border border-primary">request_id</th>
+        <th class="font-weight-bold p-2 border border-primary">
+          activity_type
+        </th>
+        <th class="font-weight-bold p-2 border border-primary">activity</th>
+        <th class="font-weight-bold p-2 border border-primary">
+          activity_time
+        </th>
+        <th class="font-weight-bold p-2 border border-primary">draft</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for invoice in activity_logs %}
+      <tr>
+        <td class="font-weight-bold p-2 border border-primary">{{invoice.id}}</td>
+        <td class="font-weight-bold p-2 border border-primary">
+          {{invoice.request_id}}
+        </td>
+        <td class="font-weight-bold p-2 border border-primary">
+          {{ invoice.activity_type }}
+        </td>
+        <td class="font-weight-bold p-2 border border-primary">
+          {{ invoice.activity }}
+        </td>
+        <td class="font-weight-bold p-2 border border-primary">
+          {{ invoice.activity_time }}
+        </td>
+        <td class="font-weight-bold p-2 border border-primary">
+          {{ invoice.draft }}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

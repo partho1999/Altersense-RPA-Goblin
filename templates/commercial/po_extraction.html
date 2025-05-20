@@ -1,0 +1,52 @@
+{% extends 'shared/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 h-screen ">
+            <div>
+                <div>
+                    <form method="post" enctype="multipart/form-data" class=" p-4 bg-white rounded shadow-md">
+                        {% csrf_token %}
+
+                        <!-- Choose File Field with medium width -->
+                        <div class="mb-4">
+                            <label for="fileInput" class="block text-gray-700 text-sm font-bold mb-2">Choose
+                                File:</label>
+                            <input type="file" name="file" id="fileInput"
+                                   class="file-input file-input-bordered file-input-info w-full max-w-xs"
+                                   accept=".zip, .pdf"
+                                   multiple required>
+                        </div>
+
+                        <button type="submit" name='upload_button'
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded">
+                            Start
+                        </button>
+
+                    </form>
+                </div>
+                <br>
+                <div class="px-4 pt-5">
+                    <button class="btn btn-outline btn-info">Export</button>
+                    <button class="btn btn-outline btn-success">Master Table</button>
+                    <button class="btn btn-outline btn-warning">Report</button>
+                </div>
+
+            </div>
+
+            <div>
+                <div class="bg-white p-6 rounded-lg shadow mb-8">
+                    <h1>Status Log</h1>
+                    <p>Processing PO_123</p>
+                    <p>Processing PO_123</p>
+                    <p>Processing PO_123</p>
+                    <p>Processing PO_123</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

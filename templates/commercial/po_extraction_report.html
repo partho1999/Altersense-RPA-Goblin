@@ -1,0 +1,65 @@
+{% extends 'shared/base.html' %} {% load static %} {% block content %}
+
+<div class="container w-full bg-white mx-auto py-8">
+  <h1 class="text-2xl font-bold mb-4 text-black">PO Extraction Reports</h1>
+  <div class="overflow-x-auto">
+    <table class="table-auto border-collapse border border-gray-400">
+      <thead>
+        <tr class="">
+          <th class="border px-3 py-2">Id</th>
+          <th class="border px-3 py-2">po_no</th>
+          <th class="border px-3 py-2">country_code</th>
+          <th class="border px-3 py-2">country_iso</th>
+          <th class="border px-3 py-2">country_name</th>
+          <th class="border px-3 py-2">currency_code</th>
+          <th class="border px-3 py-2">currency_iso</th>
+          <th class="border px-3 py-2">currency_name</th>
+          <th class="border px-3 py-2">delivery_time</th>
+          <th class="border px-3 py-2">description</th>
+          <th class="border px-3 py-2">invoice_average_price</th>
+          <th class="border px-3 py-2">item</th>
+          <th class="border px-3 py-2">no_of_pcs_per_pack</th>
+          <th class="border px-3 py-2">order_no</th>
+          <th class="border px-3 py-2">quantity_in_pack</th>
+          <th class="border px-3 py-2">quantity_in_pcs</th>
+          <th class="border px-3 py-2">value</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for po in po_data %}
+        <tr>
+          <td class="border px-3 py-2">{{ po.id }}</td>
+          <td class="border px-3 py-2">{{ po.po_no }}</td>
+          <td class="border px-3 py-2">{{ po.country_code }}</td>
+          <td class="border px-3 py-2">{{ po.country_iso }}</td>
+          <td class="border px-3 py-2">{{ po.country_name }}</td>
+          <td class="border px-3 py-2">{{ po.currency_code }}</td>
+          <td class="border px-3 py-2">{{ po.currency_iso }}</td>
+          <td class="border px-3 py-2">{{ po.currency_name }}</td>
+          <td class="border px-3 py-2">{{ po.description }}</td>
+          <td class="border px-3 py-2">{{ po.invoice_average_price }}</td>
+          <td class="border px-3 py-2">{{ po.item }}</td>
+          <td class="border px-3 py-2">{{ po.no_of_pcs_per_pack }}</td>
+          <td class="border px-3 py-2">{{ po.order_no }}</td>
+          <td class="border px-3 py-2">{{ po.quantity_in_pack }}</td>
+          <td class="border px-3 py-2">{{ po.quantity_in_pcs }}</td>
+          <td class="border px-3 py-2">{{ po.value }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="py-2">
+    <button class="btn btn-primary">Extract</button>
+  </div>
+</div>
+
+<script>
+  let json_data = "{{ json_data|escapejs }}";
+  json_data = JSON.parse(json_data);
+  console.log("Hello from po_extraction_report.html");
+  console.log({ json_data });
+</script>
+
+{% endblock %}

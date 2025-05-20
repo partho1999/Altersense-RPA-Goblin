@@ -1,0 +1,39 @@
+{% extends 'shared/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+    <div class="container  mx-auto px-4 py-8 ">
+        <h1 class="text-2xl font-bold mb-4 text-black">EXP Issuance Reports</h1>
+        <div class="overflow-x-auto">
+            <table class="table-auto border-collapse border border-gray-400">
+                <thead>
+                <tr class="bg-gray-200">
+                    <th class="px-4 py-2">Id</th>
+                    <th class="px-4 py-2">Status</th>
+                    <th class="px-4 py-2">Remarks</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="border px-4 py-2"></td>
+                    <td class="border px-4 py-2"></td>
+                    <td class="border px-4 py-2"></td>
+                </tr>
+
+                <tr>
+                    <td class="border px-4 py-2"></td>
+                    <td class="border px-4 py-2"></td>
+                    <td class="border px-4 py-2"></td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="py-2">
+            <button class="btn btn-primary">Extract</button>
+        </div>
+    </div>
+{% endblock %}

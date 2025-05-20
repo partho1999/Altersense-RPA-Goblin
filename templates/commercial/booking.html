@@ -1,0 +1,187 @@
+{% extends 'shared/base.html' %} {% load static %} {% block content %}
+
+<div class="container mx-auto px-4 py-8">
+  <div class="flex justify-end mb-4">
+    <div>
+      <button
+        id="start-booking-service"
+        onclick="startBookingService()"
+        class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md mr-2"
+      >
+        Start Booking Service
+      </button>
+      <button
+        onclick="saveAllData()"
+        class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md"
+      >
+        Update All
+      </button>
+    </div>
+  </div>
+  <div class="overflow-x-auto">
+    <table
+      id="booking-table"
+      class="w-full table-auto border-collapse border border-gray-400 mb-4 overflow-x-auto"
+    >
+      <thead>
+        <tr class="bg-gray-200">
+          <th class="border px-4 py-2">PO NO</th>
+          <th class="border px-4 py-2">ORDER NO</th>
+          <th class="border px-4 py-2">ITEM</th>
+          <th class="border px-4 py-2">GENDER</th>
+          <th class="border px-4 py-2">COUNTRY ISO</th>
+          <th class="border px-4 py-2">Deleivery Time</th>
+          <th class="border px-4 py-2">Summary Marks</th>
+          <th class="border px-4 py-2">Summary Desc</th>
+          <th class="border px-4 py-2">NO OF PCS PER PACK</th>
+          <th class="border px-4 py-2">Booking Status</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    const json_data = "{{ json_data|escapejs }}";
+    console.log({ json_data });
+    const data = JSON.parse(json_data);
+
+    const table = document.getElementById("booking-table");
+    data?.forEach((row) => {
+      const row_data = row;
+      const id = row?.id;
+      const tr = document.createElement("tr");
+      let purchaseorderbooking = row?.purchaseorderbooking || {};
+      tr.innerHTML = `
+        <td class="border px-4 py-2">${row_data?.po_no}</td>
+        <td class="border px-4 py-2">${row_data?.order_no}</td>
+        <td class="border px-4 py-2">${row_data?.item}</td>
+        <td class="border px-4 py-2">${row_data?.gender}</td>
+        <td class="border px-4 py-2">${row_data?.country_iso}</td>
+        <td class="border px-4 py-2">${row_data?.delivery_time}</td>
+        <td class="border px-4 py-2">
+            <input 
+              oninput="handleChange(event)"
+              value="${purchaseorderbooking?.summary_marks || ""}"
+              type="text" name="summary_marks" class="w-full bg-white border border-gray-400 px-2 py-1 font-semibold text-black "
+            placeholser="Enter Summary Marks"
+            />
+          </td>
+          <td class="border px-4 py-2">
+            <input 
+              value="${purchaseorderbooking?.summary_desc || ""}"
+              oninput="handleChange(event)" type="text" name="summary_desc" class="w-full bg-white border border-gray-400 px-2 py-1 font-semibold text-black "
+              placeholser="Enter Summary Description"
+            />
+          </td>
+          <td class="border px-4 py-2">
+            <input 
+              value="${purchaseorderbooking?.no_of_pcs_in_pack || ""}"
+              oninput="handleChange(event)" type="text" name="no_of_pcs_in_pack" class="w-full bg-white border border-gray-400 px-2 py-1 font-semibold text-black "
+              placeholser="Enter No of Pcs Per Pack"
+            />
+          </td>
+          <td class="border px-4 py-2">${purchaseorderbooking?.status}</td>
+          <td id="row_id" class="hidden">${id}</td>
+        `;
+      table.appendChild(tr);
+    });
+
+    let submitAbleData = {};
+
+    function handleChange(event) {
+      let name = event.target.name;
+      let value = event.target.value;
+      let row_id =
+        event.target.parentElement.parentElement.querySelector(
+          "#row_id"
+        ).innerText;
+      // console.log({ name, value, row_id });
+      submitAbleData = {
+        ...submitAbleData,
+        [row_id]: {
+          ...submitAbleData[row_id],
+          [name]: value,
+        },
+      };
+      // console.log({ submitAbleData });
+    }
+
+    async function saveAllData() {
+      console.log("Save Data");
+      console.log({ submitAbleData });
+      let url = "{% url 'booking' %}";
+      console.log({ url });
+      let response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": "{{ csrf_token }}",
+        },
+        body: JSON.stringify(submitAbleData),
+      });
+      let data = await response.json();
+      console.log({ data });
+      if (data?.status === "success") {
+        alert("Data Saved Successfully");
+      } else {
+        alert("Data Not Saved, Please Try Again");
+      }
+    }
+    let bookingServiceStarted = false;
+    // const id="start-booking-service"
+    const startBookingServiceButton = document.getElementById(
+      "start-booking-service"
+    );
+    async function startBookingService() {
+      bookingServiceStarted = true;
+      startBookingServiceButton.disabled = true;
+      startBookingServiceButton.innerText = "Booking Service Started";
+      let url = "{% url 'start_booking' %}";
+      console.log({ url });
+      let response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": "{{ csrf_token }}",
+        },
+      });
+      let data = await response.json();
+      console.log({ data });
+      if (data?.status === "success") {
+        bookingServiceStarted = false;
+        startBookingServiceButton.disabled = false;
+        startBookingServiceButton.innerText = "Start Booking Service";
+      }
+    }
+  </script>
+
+  <!-- <div class="join">
+    <input
+      class="join-item btn btn-square"
+      type="radio"
+      name="options"
+      aria-label="1"
+      checked
+    />
+    <input
+      class="join-item btn btn-square"
+      type="radio"
+      name="options"
+      aria-label="2"
+    />
+    <input
+      class="join-item btn btn-square"
+      type="radio"
+      name="options"
+      aria-label="3"
+    />
+    <input
+      class="join-item btn btn-square"
+      type="radio"
+      name="options"
+      aria-label="4"
+    />
+  </div> -->
+</div>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends "core/base.html" %}
+
+{% block title %}Book Order{% endblock title %}
+
+{% block content %}
+<h1 class="text-3xl font-semibold mb-4 text-center">Book Your Order on Damco Portal</h1>
+<!-- upload.html -->
+
+<div class="flex items-center justify-center">
+    <form id="myForm" method="post" enctype="multipart/form-data" class="w-3/5 p-4 bg-white rounded shadow-md">
+        {% csrf_token %}
+        <!--- Username Input -->
+        <div class="mb-4">
+            <label for="username" class="block text-gray-700 text-sm font-bold mb-2">Username:</label>
+            <input type="text" name="username" id="username" class="w-full py-2 px-3 border rounded-md text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+        </div>
+        <!--- Password Input -->
+        <div class="mb-4">
+            <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Password:</label>
+            <input type="password" name="password" id="password" class="w-full py-2 px-3 border rounded-md text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+        </div>
+
+        <!-- Choose File Field with medium width -->
+        <div class="mb-4">
+            <label for="fileInput" class="block text-gray-700 text-sm font-bold mb-2">Choose File:</label>
+            <input type="file" name="file" id="fileInput" accept='.xlsx' class="block w-full text-sm text-black-500
+            file:mr-4 file:py-2 file:px-2 file:rounded-md
+            file:border-0 file:text-sm file:font-semibold
+            file:bg-blue-200 file:text-black-700
+            hover:file:bg-blue-100" required>
+        </div>
+
+        <!-- Your custom HTML for other form elements, if any -->
+
+        <!-- Upload File Button -->
+        {% comment %} onclick="showSpinner()" {% endcomment %}
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md">
+            Start
+        </button>
+
+        <!-- Start Process Button -->
+        {% comment %} <button type="button" class="mt-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+            Start Process
+        </button> {% endcomment %}
+
+    </form>
+
+    <div id="processingStatus" class="hidden mt-4">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+        <p class="mt-2">Processing...</p>
+    </div>
+    
+    <div id="doneStatus" class="hidden mt-4">
+        <p>Done!</p>
+    </div>
+
+</div>
+
+<script>
+    function showSpinner() {
+        document.getElementById('myForm').style.display = 'none';
+        document.getElementById('processingStatus').style.display = 'block';
+
+        // Simulate server processing (replace this with your actual form submission logic)
+        setTimeout(function () {
+            document.getElementById('processingStatus').style.display = 'none';
+            document.getElementById('doneStatus').style.display = 'block';
+        }, 3000); // Change 3000 to the time it takes for your server processing
+    }
+</script>
+
+{% endblock content %}

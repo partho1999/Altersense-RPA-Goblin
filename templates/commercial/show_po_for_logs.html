@@ -1,0 +1,60 @@
+{% extends 'shared/base.html' %} {% load static %} {% block content %}
+
+<div>
+  <h1>Purchase Order Bookings</h1>
+  <table
+    class="table table-bordered table-hover table-striped"
+    id="po_table_id"
+  ></table>
+</div>
+
+<script>
+  let purchaseOrderBookingsDta = "{{ po_data|escapejs }}";
+  purchaseOrderBookingsDta = JSON.parse(purchaseOrderBookingsDta);
+  console.log({ purchaseOrderBookingsDta });
+  const table = document.getElementById("po_table_id");
+  const tableHead = `
+    <thead>
+      <tr>
+        <th class="font-weight-bold p-2 border border-primary">po_no</th>
+        <th class="font-weight-bold p-2 border border-primary">order_no</th>
+        <th class="font-weight-bold p-2 border border-primary">item</th>
+        <th class="font-weight-bold p-2 border border-primary">request_id</th>
+        <th class="font-weight-bold p-2 border border-primary">status</th>
+        <th></th>
+        </tr>
+    </thead>
+  `;
+  const tableBody = `
+        <tbody>
+        ${purchaseOrderBookingsDta.map(
+          (po) => `
+            <tr>
+                <td 
+                 class="font-weight-bold p-2 border border-primary"
+                 >${po.po_no}</td>
+                <td
+                 class="font-weight-bold p-2 border border-primary">${po.order_no}</td>
+                <td
+                 class="font-weight-bold p-2 border border-primary">${po.item}</td>
+                <td
+                 class="font-weight-bold p-2 border border-primary">${po.request_id}</td>
+                <td
+                 class="font-weight-bold p-2 border border-primary">${po?.purchaseorderbooking?.status}</td>
+                <td
+                    class="font-weight-bold p-2 border border-primary">
+                        <a 
+                        class="btn btn-primary btn-sm text-white"
+                        href="/commercial/activity-log/${po.request_id}"
+                        >View Logs</a>
+                </td>
+            </tr>
+            `
+        )}
+        </tbody>
+    `;
+
+  table.innerHTML = tableHead + tableBody;
+</script>
+
+{% endblock %}

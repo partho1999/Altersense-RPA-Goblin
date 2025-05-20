@@ -1,0 +1,86 @@
+{% extends 'shared/base.html' %} {% load static %} {% block content %}
+
+<div class="flex justify-center items-center py-8">
+  <h1 class="text-3xl font-bold text-center shadow-lg rounded-lg p-4 bg-white">
+    Commercial
+  </h1>
+</div>
+
+<div class="container mx-auto px-4 py-8">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 h-screen">
+    <div>
+      <div class="bg-white p-6 rounded-lg shadow mb-8">
+        <a
+          href="{% url 'po_extraction' %}"
+          class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md block mx-auto"
+        >
+          PO Extraction
+        </a>
+      </div>
+      <div class="bg-white p-6 rounded-lg shadow mb-8">
+        <a
+          href="{% url 'purchase_orders' %}"
+          class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md block mx-auto"
+        >
+          Purchase Orders
+        </a>
+      </div>
+      <div class="bg-white p-6 rounded-lg shadow mb-8">
+        <a
+          href="{% url 'invoice_extractor' %}"
+          class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md block mx-auto"
+        >
+          Extract Invoices
+        </a>
+      </div>
+      <div class="bg-white p-6 rounded-lg shadow mb-8">
+        <a
+          href="{% url 'show_all_invoice' %}"
+          class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md block mx-auto"
+        >
+          All Invoices
+        </a>
+      </div>
+      <div class="bg-white p-6 rounded-lg shadow mb-8">
+        <button
+          class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md block mx-auto"
+        >
+          EXP Issuance
+        </button>
+      </div>
+      <div class="bg-white p-6 rounded-lg shadow">
+        <button
+          class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md block mx-auto"
+        >
+          EXP Download
+        </button>
+      </div>
+    </div>
+
+    <div>
+      <div class="bg-white p-6 rounded-lg shadow mb-8">
+        <a
+          href="{% url 'booking' %}"
+          class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md block mx-auto"
+        >
+          Booking
+        </a>
+      </div>
+      <div class="bg-white p-6 rounded-lg shadow mb-8">
+        <button
+          class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md block mx-auto"
+        >
+          E-Invoice
+        </button>
+      </div>
+      <div class="bg-white p-6 rounded-lg shadow">
+        <button
+          class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md block mx-auto"
+        >
+          FCR
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

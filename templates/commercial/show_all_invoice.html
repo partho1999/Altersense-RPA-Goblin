@@ -1,0 +1,120 @@
+{% extends 'shared/base.html' %} {% load static %} {% block content %}
+
+<div>
+  <h1>All Invoices</h1>
+  <table
+    class="table table-bordered table-hover table-striped"
+    id="invoices_table_id"
+  >
+    <thead>
+      <tr>
+        <th class="font-weight-bold p-2 border border-primary">invoice_no</th>
+        <th class="font-weight-bold p-2 border border-primary">invoice_date</th>
+        <th class="font-weight-bold p-2 border border-primary">
+          exporters_ref
+        </th>
+        <th class="font-weight-bold p-2 border border-primary">hs_code</th>
+        <th class="font-weight-bold p-2 border border-primary">description</th>
+        <th class="font-weight-bold p-2 border border-primary">composition</th>
+        <th class="font-weight-bold p-2 border border-primary">quantity</th>
+        <th class="font-weight-bold p-2 border border-primary">po_no</th>
+        <th class="font-weight-bold p-2 border border-primary">country_iso</th>
+        <th class="font-weight-bold p-2 border border-primary">fcr_status</th>
+        <th class="font-weight-bold p-2 border border-primary">request_id</th>
+        <th class="font-weight-bold p-2 border border-primary">Status</th>
+        <th class="font-weight-bold p-2 border border-primary">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for invoice in invoices %}
+      <tr>
+        <td class="font-weight-bold p-2 border border-primary">
+          {{ invoice.invoice_no }}
+        </td>
+        <td class="font-weight-bold p-2 border border-primary">
+          {{ invoice.invoice_date }}
+        </td>
+        <td class="font-weight-bold p-2 border border-primary">
+          {{ invoice.exporters_ref }}
+        </td>
+        <td class="font-weight-bold p-2 border border-primary">
+          {{ invoice.hs_code }}
+        </td>
+        <td class="font-weight-bold p-2 border border-primary">
+          {{ invoice.description }}
+        </td>
+        <td class="font-weight-bold p-2 border border-primary">
+          {{ invoice.composition }}
+        </td>
+        <td class="font-weight-bold p-2 border border-primary">
+          {{ invoice.quantity }}
+        </td>
+        <td class="font-weight-bold p-2 border border-primary">
+          {{ invoice.po_no }}
+        </td>
+        <td class="font-weight-bold p-2 border border-primary">
+          {{ invoice.country_iso }}
+        </td>
+        <td class="font-weight-bold p-2 border border-primary">
+          {{ invoice.fcr_status }}
+        </td>
+        <td class="font-weight-bold p-2 border border-primary">
+          {{ invoice.request_id }}
+        </td>
+        <td class="font-weight-bold p-2 border border-primary">
+          {{ invoice.status }}
+        </td>
+        <td class=" border-primary flex ">
+          <button
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+            onclick="handleBtnClick(event, {{invoice.id}})"
+          >
+            Start
+          </button>
+          <a href="{% url 'get_invoice_activity_logs' invoice.request_id %}" class="m-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
+            View Logs
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<script>
+  const handleBtnClick = async (e, invoiceId) => {
+    console.log("====================================");
+    console.log("Button Clicked");
+    console.log("====================================");
+    console.log(e.target);
+    console.log("====================================");
+    console.log({ invoiceId });
+    console.log("====================================");
+    await start_invoice_bot(invoiceId);
+  };
+
+  async function start_invoice_bot(invoice_id) {
+    await fetch("/commercial/start-invoice-bot",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": "{{ csrf_token }}",
+      },
+      body: JSON.stringify({
+        invoice_id: invoice_id,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("data===>", data);
+        if (data.status === "success") {
+          alert("Bot started successfully");
+        } else {
+          alert("Bot failed to start");
+        }
+      });
+  }
+</script>
+
+{% endblock %}

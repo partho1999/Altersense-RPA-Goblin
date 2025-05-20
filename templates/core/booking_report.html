@@ -1,0 +1,24 @@
+
+{% extends "core/base.html" %}
+
+{% block title %}Booking Report{% endblock title %}
+
+{% block content %}
+<h1 class="text-3xl font-semibold mb-4 text-center">Booking Report</h1>
+<!-- upload.html -->
+
+<div class="flex items-center justify-center">
+    
+    
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+<script>
+
+    // Check if booking_status is not empty and display an alert
+    {% if booking_status %}
+        alert("{{ booking_status }}");
+    {% endif %}
+
+</script>
+
+{% endblock content %}

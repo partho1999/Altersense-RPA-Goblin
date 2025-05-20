@@ -1,0 +1,17 @@
+Django
+django-browser-reload
+dnspython
+pytz
+python-dotenv
+pdfplumber
+pandas
+django-multiupload
+psycopg2-binary
+# psycopg2
+beautifulsoup4
+pydantic
+# selenium
+selenium==3.12.0
+ipython==7.0.1
+xlsxwriter
+requests

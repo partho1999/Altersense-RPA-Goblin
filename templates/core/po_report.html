@@ -1,0 +1,24 @@
+
+{% extends "core/base.html" %}
+
+{% block title %}Purchase Order Report{% endblock title %}
+
+{% block content %}
+<h1 class="text-3xl font-semibold mb-4 text-center">Purchase Order Report</h1>
+<!-- upload.html -->
+
+<div class="flex items-center justify-center">
+    
+    
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+<script>
+
+    // Check if booking_status is not empty and display an alert
+    {% if po_status %}
+        alert("{{ po_status }}");
+    {% endif %}
+
+</script>
+
+{% endblock content %}
